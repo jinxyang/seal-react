@@ -1,0 +1,44 @@
+{
+  "name": "seal-react",
+  "version": "1.0.0",
+  "description": "Components & hooks for react in seal.",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "start": "npm run dev",
+    "init": "react-cli init",
+    "dev": "react-cli dev",
+    "build": "react-cli build",
+    "transform": "react-cli transform"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinxyang/seal-react.git"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "hooks",
+    "seal"
+  ],
+  "author": "Jinxyang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jinxyang/seal-react/issues"
+  },
+  "homepage": "https://github.com/jinxyang/seal-react#readme",
+  "devDependencies": {
+    "husky": "^7.0.4"
+  },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "dependencies": {
+    "json2mq": "^0.2.0"
+  }
+}
