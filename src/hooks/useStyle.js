@@ -1,67 +1,61 @@
 import React from 'react'
-import { isFunction, find, dropWhile } from 'lodash'
+import _ from 'lodash'
 
 import { useConfigState } from '../components/ConfigProvider'
+import useResponsive from './useResponsive'
 
-const styleValueCallbacks = {
-  gap: (multiples = 1, theme) => theme.size * multiples + 'px',
-  padding: (multiples = 0, theme) => theme.size * multiples + 'px',
+const prefixes = [':', '&', '.']
+
+const getPropValue = (value, prop, responsive = (v) => v) => {
+  if (_.some(prefixes, _.startsWith(prop, ?))) {
+    return _.mapValues(value, getPropValue(?, ?, responsive))
+  }
+
+  return responsive(value)
 }
 
-const toPair = (array, defaultValue = null) =>
-  Array.isArray(array) ? array : [array, defaultValue]
+const doubles =
+  (prop) =>
+  (times, { theme }) =>
+    _.isNumber(times) ? _.get(theme, prop) * times + 'px' : times
+const getFontSize = doubles('font.size')
+const getSpacing = doubles('spacing')
 
-const useStyle = (config = [], props = {}) => {
-  const [{ breakpoints, theme }] = useConfigState()
+const callbacks = {
+  gap: getSpacing,
+  margin: getSpacing,
+  padding: getSpacing,
+  fontSize: getFontSize,
+}
 
-  const getPropValue = React.useCallback(
-    (value) => {
-      if (typeof value !== 'object') {
-        return value
-      } else if (breakpoints[0] in value) {
-        return value[breakpoints[0]]
-      } else {
-        return value[find(breakpoints, (key) => key in value)]
-      }
-    },
-    [breakpoints],
+const getStyleValue = (value, prop, utils = {}) => {
+  if (!_.isFunction(value) && _.isObject(value)) {
+    return _.mapValues(value, getStyleValue(?, ?, utils))
+  }
+
+  return (
+    _.find(
+      [value, callbacks[prop]],
+      _.isFunction,
+    )?.(..._.dropWhile([value, utils], _.isFunction)) ??
+    _.get(utils.theme, value) ??
+    value ??
+    false
   )
+}
 
-  const getStyleValue = React.useCallback(
-    (attr, value, callback) => {
-      return (
-        find(
-          [value, callback, styleValueCallbacks[attr]],
-          isFunction,
-        )?.(...dropWhile([value, theme], isFunction)) ?? value
-      )
-    },
-    [theme],
-  )
+const useStyle = (styles = {}) => {
+  const responsive = useResponsive()
+  const [{ theme }] = useConfigState()
 
-  const style = React.useMemo(() => {
-    return Object.fromEntries(
-      config
-        .map((item) => {
-          // TODO: 默认值设计
-          const [propKey, option] = toPair(item, [])
-          // TODO: 无别名情况处理(styleAttr = callback)
-          const [styleAttr = propKey, callback] = toPair(option)
-          // ? 伪类||伪元素
-          if (!(styleAttr in document.documentElement.style)) return null
-
-          const propValue = getPropValue(props[propKey])
-          const styleValue =
-            getStyleValue(styleAttr, propValue, callback) ?? false
-
-          return typeof styleValue !== 'boolean' && [styleAttr, styleValue]
-        })
-        .filter(Boolean),
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getPropValue, getStyleValue, props])
-
-  return style
+  return React.useMemo(() => {
+    return _.mapValues(styles, (value, prop) => {
+      return getStyleValue(getPropValue(value, prop, responsive), prop, {
+        theme,
+        responsive,
+      })
+    })
+  }, [responsive, styles, theme])
 }
 
 export default useStyle

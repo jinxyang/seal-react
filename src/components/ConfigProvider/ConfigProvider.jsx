@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { defaultTheme } from '../../lib/createTheme'
+import { defaultTheme } from '../../libs/createTheme'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import PortalToasts from '../PortalToasts'
 

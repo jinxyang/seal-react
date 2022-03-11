@@ -1,6 +1,8 @@
 export default {
-  size: 16,
-  space: 16,
+  font: {
+    size: 16,
+  },
+  spacing: 16,
   breakpoints: {
     xs: 0,
     sm: 600,

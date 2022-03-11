@@ -1,6 +1,6 @@
-import generator from './generator'
+import _ from 'lodash'
 
-import dropProp from '../../utils/dropProp'
+import generator from './generator'
 
 const defaultOptions = {
   inputComponentMap: {},
@@ -17,7 +17,7 @@ const createFields = (
   return Object.keys(categories).reduce((fields, name) => {
     return {
       ...fields,
-      [name]: dropProp(
+      [name]: _.omit(
         generator(globalFields, categories[name], options),
         'model',
       ),

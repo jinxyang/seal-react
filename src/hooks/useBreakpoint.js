@@ -1,14 +1,17 @@
 import React from 'react'
-import { throttle, last } from 'lodash'
+import _ from 'lodash'
 
 const getPoints = (values = [], width) =>
-  values.filter(([key, [min]]) => width >= min).map(([key]) => key)
+  values
+    .filter(([key, [min]]) => width >= min)
+    .map(([key]) => key)
+    .join(',')
 
 const useBreakpoint = (values = [], getWidth = () => window.innerWidth) => {
   const [points, setPoints] = React.useState(getPoints(values, getWidth()))
 
   React.useEffect(() => {
-    const handler = throttle(() => {
+    const handler = _.throttle(() => {
       setPoints(getPoints(values, getWidth()))
     }, 200)
 
@@ -20,7 +23,9 @@ const useBreakpoint = (values = [], getWidth = () => window.innerWidth) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return points.length ? points : [last(values)[0]]
+  return React.useMemo(() => {
+    return points.length ? points.split(',') : [_.last(values)[0]]
+  }, [points, values])
 }
 
 export default useBreakpoint

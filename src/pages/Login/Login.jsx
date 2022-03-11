@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useGlobalState } from 'contexts'
-import { Form, Password, Button, Window, Flex } from 'components'
+import { Form, Password, Button, Viewport, Flex } from 'components'
 import { useForm, useToast } from 'hooks'
 
 const service = (data = {}) => {
@@ -18,7 +18,13 @@ const Login = () => {
 
   const [formProps, { reset, state }] = useForm(
     service,
-    ['user', ['username', ['password', { component: Password }]]],
+    [
+      'user',
+      [
+        ['username', { value: 'admin' }],
+        ['password', { component: Password, value: '123456' }],
+      ],
+    ],
     {
       onSubmitted: ({ code, data, message }) => {
         if (!code) {
@@ -30,31 +36,40 @@ const Login = () => {
   )
 
   return (
-    <Window>
+    <Viewport>
       <Flex
-        justify="center"
-        align="center"
-        height="100%"
-        padding={{ xs: 1, sm: 0 }}
+        cross="center"
+        main="center"
+        styles={{
+          height: '100%',
+          padding: 1,
+        }}
       >
-        <Flex.Item flex="1" maxWidth={{ xs: 300, sm: 250 }}>
-          <Form {...formProps}>
-            <Flex gap={0.5} flex={1} direction={{ xs: 'column', sm: 'row' }}>
-              <Flex.Item flex={2}>
-                <Button type="submit" block disabled={state.loading}>
-                  提交
-                </Button>
-              </Flex.Item>
-              <Flex.Item>
-                <Button type="reset" block onClick={reset}>
-                  重置
-                </Button>
-              </Flex.Item>
-            </Flex>
-          </Form>
-        </Flex.Item>
+        <Form
+          {...formProps}
+          styles={{
+            flex: 1,
+            maxWidth: { sm: 300 },
+          }}
+        >
+          <Flex
+            direction={{ xs: 'column', sm: 'row' }}
+            cross={{ sm: 'flex-end' }}
+          >
+            <Flex.Item flex="2">
+              <Button block disabled={state.loading} type="submit">
+                提交
+              </Button>
+            </Flex.Item>
+            <Flex.Item flex="1">
+              <Button block onClick={reset} type="reset">
+                重置
+              </Button>
+            </Flex.Item>
+          </Flex>
+        </Form>
       </Flex>
-    </Window>
+    </Viewport>
   )
 }
 

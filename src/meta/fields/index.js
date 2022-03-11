@@ -1,4 +1,4 @@
-import { createFields } from 'lib'
+import { createFields } from 'libs'
 
 import global from './global'
 import user from './user'
@@ -7,7 +7,11 @@ const fields = createFields(
   global,
   { user },
   {
-    inputComponentMap: { string: 'Input', password: 'Password' },
+    inputComponentMap: {
+      string: 'Input',
+      password: 'Password',
+      number: 'Input',
+    },
   },
 )
 

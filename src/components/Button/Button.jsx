@@ -1,34 +1,31 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import useStyle from '../../hooks/useStyle'
+import View from '../View'
 
-const StyledButton = styled.button`
-  ${({ $style }) => $style};
-
-  color: inherit;
-  font: inherit;
-`
-
-const styleConfig = [['block', ['width', (block) => block && '100%']]]
-
-const Button = (props) => {
-  const {
-    type = 'button',
-    disabled = false,
-    onClick = () => {},
-    children,
-  } = props
-  const style = useStyle(styleConfig, props)
+const Button = ({
+  type = 'button',
+  disabled = false,
+  block = false,
+  styles = {},
+  onClick = () => {},
+  children,
+  ...props
+}) => {
   return (
-    <StyledButton
+    <View
+      {...props}
+      as="button"
+      styles={{
+        width: block && '100%',
+        whiteSpace: 'nowrap',
+        ...styles,
+      }}
       type={type}
       disabled={disabled}
       onClick={onClick}
-      $style={style}
     >
       {children}
-    </StyledButton>
+    </View>
   )
 }
 

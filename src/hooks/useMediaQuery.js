@@ -1,6 +1,7 @@
 import React from 'react'
 
 const useMediaQuery = (mediaQueryString) => {
+  // TODO: 兼容breakpoint
   const mql = React.useMemo(() => {
     return window.matchMedia(mediaQueryString)
     // eslint-disable-next-line react-hooks/exhaustive-deps

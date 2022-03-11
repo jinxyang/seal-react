@@ -1,37 +1,38 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import useStyle from '../../hooks/useStyle'
+import View from '../View'
 
-const StyledFlex = styled.div`
-  ${({ $style }) => $style};
-`
-
-const styleConfig = [
-  ['inline', ['display', (inline) => (inline ? 'inline-flex' : 'flex')]],
-  ['direction', 'flex-direction'],
-  'gap',
-  ['wrap', 'flexWrap'],
-  ['justify', 'justifyContent'],
-  ['content', 'alignContent'],
-  ['align', 'alignItems'],
-  'width',
-  'height',
-  'padding',
-]
-
-const Flex = (props) => {
-  const { as = 'div', flex, children } = props
-  const style = useStyle(styleConfig, props)
-
+const Flex = ({
+  as = 'div',
+  inline = false,
+  direction = '',
+  wrap = '',
+  gap = 1,
+  main = '',
+  cross = '',
+  align = '',
+  styles = {},
+  children,
+  ...props
+}) => {
   return (
-    <StyledFlex as={as} $style={style}>
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child)
-          ? React.cloneElement(child, { flex, ...child.props })
-          : child,
-      )}
-    </StyledFlex>
+    <View
+      {...props}
+      as={as}
+      styles={{
+        display: ({ responsive }) =>
+          responsive(inline) ? 'inline-flex' : 'flex',
+        flexDirection: direction,
+        flexWrap: wrap,
+        gap,
+        justifyContent: main,
+        alignItems: cross,
+        alignContent: align,
+        ...styles,
+      }}
+    >
+      {children}
+    </View>
   )
 }
 

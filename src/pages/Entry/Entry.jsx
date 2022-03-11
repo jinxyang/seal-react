@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 
 import { useGlobalState } from 'contexts'
 import { APIs } from 'config'
@@ -48,12 +49,8 @@ const Entry = () => {
   }, [])
 
   return (
-    <ConfigProvider
-      fields={fields}
-      fetchOptions={fetchOptions}
-      toastOptions={{ hover: true }}
-    >
-      {token ? <Layout /> : <Login />}
+    <ConfigProvider fields={fields} fetchOptions={fetchOptions}>
+      <BrowserRouter>{token ? <Layout /> : <Login />}</BrowserRouter>
     </ConfigProvider>
   )
 }

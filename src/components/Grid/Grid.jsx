@@ -1,27 +1,38 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import useStyle from '../../hooks/useStyle'
+import View from '../View'
 
-const StyledGrid = styled.div`
-  ${({ $style }) => $style};
-`
-
-const styleConfig = [
-  ['inline', ['display', (inline) => (inline ? 'inline-grid' : 'grid')]],
-  ['columns', ['gridTemplateColumns', (columns) => `repeat(${columns}, 1fr)`]],
-  'gap',
-]
-
-const Grid = (props) => {
-  const { as = 'div', asProps = {}, children } = props
-
-  const style = useStyle(styleConfig, props)
-
+const Grid = ({
+  as = 'div',
+  inline = false,
+  columns,
+  rows,
+  gap = 1,
+  styles = {},
+  children,
+  ...props
+}) => {
   return (
-    <StyledGrid as={as} {...asProps} $style={style}>
-      {children}
-    </StyledGrid>
+    <View
+      {...props}
+      as={as}
+      styles={{
+        display: ({ responsive }) =>
+          responsive(inline) ? 'inline-grid' : 'grid',
+        gridTemplateColumns: ({ responsive }) =>
+          columns && `repeat(${responsive(columns)}, 1fr)`,
+        gridTemplateRows: ({ responsive }) =>
+          rows && `repeat(${responsive(rows)}, 1fr)`,
+        gap,
+        ...styles,
+      }}
+    >
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, { columns })
+          : child,
+      )}
+    </View>
   )
 }
 

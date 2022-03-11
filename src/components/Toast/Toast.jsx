@@ -1,6 +1,6 @@
 import React from 'react'
+import _ from 'lodash'
 
-import dropProp from '../../utils/dropProp'
 import { useConfigState } from '../ConfigProvider'
 
 const defaultOptions = {
@@ -19,8 +19,8 @@ const Toast = ({
   show = false,
   text = '',
   type = 'normal',
-  duration = null,
-  hover = null,
+  duration,
+  hover,
   onClick = () => true,
   onClose = () => {},
   children,
@@ -32,7 +32,8 @@ const Toast = ({
     return {
       ...defaultOptions,
       ...toastOptions,
-      ...dropProp({ duration, hover }, ({ value }) => value !== null),
+      ...(_.isNumber(duration) && { duration }),
+      ...(_.isBoolean(hover) && { hover }),
     }
   }, [duration, hover, toastOptions])
 

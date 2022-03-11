@@ -1,10 +1,9 @@
 import React from 'react'
-import { get } from 'lodash'
+import _ from 'lodash'
 
-import toObject from '../../utils/toObject'
-import dropProp from '../../utils/dropProp'
 import { useConfigState } from '../ConfigProvider'
 import Grid from '../Grid'
+import Flex from '../Flex'
 
 import FormItem from './FormItem'
 import builtInComponents from './components'
@@ -13,14 +12,16 @@ const Form = ({
   fields = [],
   values = {},
   errorShow = false,
+  direction = 'column',
+  columns = 1,
+  gap = 1,
+  styles = {},
   onInit = () => {},
   onChange = () => {},
   onError = () => {},
   onSubmit = () => {},
   children,
-  // for Grid
-  columns = 1,
-  gap = 1,
+  ...props
 }) => {
   const [{ inputComponents }] = useConfigState()
   const [errors, setErrors] = React.useState({})
@@ -46,15 +47,19 @@ const Form = ({
   }
 
   React.useEffect(() => {
-    onError(dropProp(errors, ({ value }) => !!value))
+    onError(_.omitBy(errors, _.isString))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors])
 
   React.useEffect(() => {
     const defaultValues = {
-      ...toObject(
-        fields.filter(({ value }) => !!value),
-        { prop: 'key', formatter: ({ value }) => value },
+      ..._.reduce(
+        fields,
+        (values, { key, value }) => ({
+          ...values,
+          ...(value != null && { [key]: value }),
+        }),
+        {},
       ),
       ...values,
     }
@@ -64,54 +69,67 @@ const Form = ({
   }, [])
 
   return (
-    <Grid
+    <Flex
+      {...props}
       as="form"
-      columns={columns}
+      direction={direction}
       gap={gap}
-      asProps={{
-        onSubmit: handleSubmit,
-      }}
+      styles={styles}
+      onSubmit={handleSubmit}
     >
-      {fields.map((field) => {
-        const {
-          component = '',
-          key = '',
-          label = '',
-          render,
-          rules = [],
-          validator,
-          ...props
-        } = typeof field === 'function' ? field(values) : field
+      <Grid columns={columns} gap={gap} styles={{ flex: 1 }}>
+        {fields.map((field) => {
+          // TODO: into FormItem(rename: FormField)
+          const {
+            component = '',
+            key = '',
+            label = '',
+            render,
+            rules = [],
+            validator,
+            block = false,
+            column = 1,
+            row = 1,
+            styles = {},
+            ...props
+          } = typeof field === 'function' ? field(values) : field
 
-        const Input =
-          render?.(values) ?? typeof component === 'string'
-            ? inputs[component]
-            : component
-        if (!Input) return null
+          const Input =
+            render?.(values) ??
+            inputs[_.isString(component) && component] ??
+            component
 
-        const value = get(values, key)
+          if (!_.isObject(Input)) return null
 
-        return (
-          <FormItem
-            key={key}
-            value={value}
-            label={label}
-            rules={rules}
-            errorShow={errorShow}
-            validator={validator}
-            onError={(message) => handleError(key, message)}
-          >
-            <Input
-              block
-              {...props}
+          const value = _.get(values, key)
+
+          return (
+            <FormItem
+              gap={gap}
+              block={block}
+              column={column}
+              row={row}
+              styles={styles}
+              key={key}
               value={value}
-              onChange={(value) => handleChange(key, value)}
-            />
-          </FormItem>
-        )
-      })}
-      <Grid.Item>{children}</Grid.Item>
-    </Grid>
+              label={label}
+              rules={rules}
+              errorShow={errorShow}
+              validator={validator}
+              onError={(message) => handleError(key, message)}
+            >
+              <Input
+                block
+                {...props}
+                value={value}
+                onChange={(value) => handleChange(key, value)}
+              />
+            </FormItem>
+          )
+        })}
+      </Grid>
+      {children}
+    </Flex>
   )
 }
 

@@ -1,8 +1,5 @@
-export { default as dropProp } from './dropProp'
 export { default as joinPath } from './joinPath'
-export { default as map } from './map'
 export { default as parse } from './parse'
 export { default as sleep } from './sleep'
 export { default as stringify } from './stringify'
-export { default as toObject } from './toObject'
 export { default as validator } from './validator'
