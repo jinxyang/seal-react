@@ -8,7 +8,7 @@ const useResponsive = () => {
 
   return React.useCallback(
     (value) => {
-      if (_.isFunction(value) || !_.isObject(value)) {
+      if (_.isFunction(value) || _.isArray(value) || !_.isObject(value)) {
         return value
       } else if (breakpoints[0] in value) {
         return value[breakpoints[0]]

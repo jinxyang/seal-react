@@ -1,18 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import useStyle from '../../hooks/useStyle'
 
 const StyledView = styled.div(({ $style }) => $style)
 
-const View = ({ as = 'div', styles = {}, children, ...props }) => {
-  const style = useStyle(styles)
+const View = (
+  { as = 'div', blur = false, styles = {}, children, ...props },
+  ref,
+) => {
+  const style = useStyle({
+    backdropFilter: blur && `blur(${_.isBoolean(blur) ? '1px' : blur})`,
+    ...styles,
+  })
 
   return (
-    <StyledView {...props} as={as} $style={style}>
+    <StyledView {...props} ref={ref} as={as} $style={style}>
       {children}
     </StyledView>
   )
 }
 
-export default View
+export default React.forwardRef(View)

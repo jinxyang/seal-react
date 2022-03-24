@@ -4,32 +4,84 @@ import _ from 'lodash'
 import { useConfigState } from '../components/ConfigProvider'
 import useResponsive from './useResponsive'
 
-const prefixes = [':', '&', '.']
+const prefixes = [
+  ':', // for Pseudo-classes & Pseudo-elements
+  '&', // for Selectors
+  '.', // for Selectors
+  '#', // for Selectors
+  '@', // for At-rules
+]
+const equals = [
+  'from', // attr for keyframes
+  'to', // attr for keyframes
+]
+const suffixes = [
+  '%', // attr for keyframes
+]
+
+const doubles =
+  (prop, unit = 'px') =>
+  (times, { theme }) => {
+    return _.isNumber(times) ? _.get(theme, prop) * times + unit : times
+  }
+
+const multipleDoubles =
+  (getter, separator = ' ') =>
+  (value, utils) => {
+    return _.isArray(value)
+      ? _.map(value, getter(?, utils)).join(separator)
+      : getter(value, utils)
+  }
+
+const getFontSize = doubles('font.size')
+const getSpace = doubles('space')
+const getRadius = doubles('radius')
+const getColor = (value, { theme }) => _.get(theme.colors, value) ?? value
+const getBorder = doubles('border', 'px solid')
+
+const callbacks = {
+  top: getSpace,
+  right: getSpace,
+  bottom: getSpace,
+  left: getSpace,
+  gap: getSpace,
+  margin: multipleDoubles(getSpace),
+  marginTop: getSpace,
+  marginRight: getSpace,
+  marginBottom: getSpace,
+  marginLeft: getSpace,
+  padding: multipleDoubles(getSpace),
+  paddingTop: getSpace,
+  paddingRight: getSpace,
+  paddingBottom: getSpace,
+  paddingLeft: getSpace,
+  borderRadius: multipleDoubles(getRadius),
+  fontSize: getFontSize,
+  color: getColor,
+  background: getColor,
+  backgroundColor: getColor,
+  border: getBorder,
+  borderTop: getBorder,
+  borderRight: getBorder,
+  borderBottom: getBorder,
+  borderLeft: getBorder,
+  borderColor: getColor,
+}
 
 const getPropValue = (value, prop, responsive = (v) => v) => {
-  if (_.some(prefixes, _.startsWith(prop, ?))) {
+  if (
+    _.includes(equals, prop) ||
+    _.some(prefixes, _.startsWith(prop, ?)) ||
+    _.some(suffixes, _.endsWith(prop, ?))
+  ) {
     return _.mapValues(value, getPropValue(?, ?, responsive))
   }
 
   return responsive(value)
 }
 
-const doubles =
-  (prop) =>
-  (times, { theme }) =>
-    _.isNumber(times) ? _.get(theme, prop) * times + 'px' : times
-const getFontSize = doubles('font.size')
-const getSpacing = doubles('spacing')
-
-const callbacks = {
-  gap: getSpacing,
-  margin: getSpacing,
-  padding: getSpacing,
-  fontSize: getFontSize,
-}
-
 const getStyleValue = (value, prop, utils = {}) => {
-  if (!_.isFunction(value) && _.isObject(value)) {
+  if (_.isObject(value) && !_.isFunction(value) && !_.isArray(value)) {
     return _.mapValues(value, getStyleValue(?, ?, utils))
   }
 
@@ -50,7 +102,8 @@ const useStyle = (styles = {}) => {
 
   return React.useMemo(() => {
     return _.mapValues(styles, (value, prop) => {
-      return getStyleValue(getPropValue(value, prop, responsive), prop, {
+      const propValue = getPropValue(value, prop, responsive)
+      return getStyleValue(propValue, prop, {
         theme,
         responsive,
       })

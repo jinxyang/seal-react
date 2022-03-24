@@ -7,6 +7,7 @@ import PortalToasts from '../PortalToasts'
 const ConfigContext = React.createContext({})
 
 const ConfigProvider = ({
+  mode = 'dark',
   theme = defaultTheme,
   fetchOptions = {},
   fields = {},
@@ -14,6 +15,7 @@ const ConfigProvider = ({
   inputComponents = {},
   outputComponents = {},
   toastOptions = {},
+  chartOptions = {},
   children,
 }) => {
   const [toasts, setToasts] = React.useState([])
@@ -35,19 +37,29 @@ const ConfigProvider = ({
       inputComponents,
       inputSize,
       outputComponents,
-      theme,
+      theme: {
+        ...theme,
+        colors: theme.colors[mode],
+      },
       toastOptions,
+      chartOptions,
     }
   }, [
     breakpoints,
+    chartOptions,
     fetchOptions,
     fields,
     inputComponents,
     inputSize,
+    mode,
     outputComponents,
     theme,
     toastOptions,
   ])
+
+  React.useEffect(() => {
+    console.log(state)
+  }, [state])
 
   return (
     <ConfigContext.Provider value={[state, { setToasts }]}>
