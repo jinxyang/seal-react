@@ -44,7 +44,7 @@ const callbacks = {
   right: getSpace,
   bottom: getSpace,
   left: getSpace,
-  gap: getSpace,
+  gap: multipleDoubles(getSpace),
   margin: multipleDoubles(getSpace),
   marginTop: getSpace,
   marginRight: getSpace,

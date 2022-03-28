@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { LineChart as Chart } from 'echarts/charts'
+import { BarChart as Chart } from 'echarts/charts'
 import {
   GridComponent,
   LegendPlainComponent,
@@ -13,7 +13,7 @@ import View from '../View'
 import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
-const LineChart = ({
+const BarChart = ({
   value = [],
   option: customOption = {},
   zoom = false,
@@ -83,4 +83,4 @@ const LineChart = ({
   return <View ref={setChart} styles={{ height: '100%' }} />
 }
 
-export default LineChart
+export default BarChart
