@@ -8,6 +8,7 @@ import {
 
 import useChart from '../../hooks/useChart'
 import View from '../View'
+import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
 const RadarChart = ({ value = [], option: customOption = {}, config = {} }) => {
@@ -26,7 +27,29 @@ const RadarChart = ({ value = [], option: customOption = {}, config = {} }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chart, option])
 
-  return <View ref={setChart} styles={{ height: '100%' }} />
+  return (
+    <View styles={{ position: 'relative', height: '100%' }}>
+      <View
+        ref={setChart}
+        styles={{ opacity: value.length ? 1 : 0, height: '100%' }}
+      />
+      {!value.length && (
+        <Flex
+          main="center"
+          cross="center"
+          styles={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          暂无数据
+        </Flex>
+      )}
+    </View>
+  )
 }
 
 export default RadarChart

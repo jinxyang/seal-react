@@ -19,7 +19,12 @@ const defaultConfig = {
   yAxisNameFormatter: () => null,
 }
 
-const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
+const optionGenerator = (
+  darkMode,
+  value = [],
+  customOption = {},
+  customConfig = {},
+) => {
   if (value.length < 2) return {}
 
   const {
@@ -27,6 +32,9 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
     yAxisNameFormatter,
     tooltips = [],
   } = { ...defaultConfig, ...customConfig }
+
+  const textColor = darkMode ? '#aaa' : '#555'
+  const lineColor = darkMode ? 'rgba(255, 255, 255, .2)' : 'rgba(0, 0, 0, .2)'
 
   const legend = {
     data: _.map(value, ({ name }, index) => ({
@@ -46,35 +54,26 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
     formatter: (param) =>
       renderToString(<Tooltip param={param} value={value} list={tooltips} />),
   }
-  const visualMap = [
-    {
-      top: 10,
-      right: 0,
-      dimension: 0,
-      min: 0,
-      max: 1,
-      itemWidth: 20,
-      itemHeight: 100,
-      calculable: true,
-      precision: 2,
-      text: ['1'],
-      inRange: {
-        symbolSize: [5, 40],
-      },
-      outOfRange: {
-        symbolSize: [5, 40],
-        color: ['rgba(0, 0, 0, .1)'],
-      },
-      controller: {
-        inRange: {
-          color: [colors[0]],
-        },
-        outOfRange: {
-          color: ['rgba(0, 0, 0, .1)'],
-        },
-      },
+  const nameTextStyle = {
+    color: textColor,
+  }
+  const axisLine = {
+    show: false,
+  }
+  const axisTick = {
+    show: false,
+  }
+  const axisLabel = {
+    color: textColor,
+  }
+  const splitLine = {
+    show: true,
+    lineStyle: {
+      color: lineColor,
+      type: [4, 4],
+      cap: 'round',
     },
-  ]
+  }
   const xAxis = {
     type: 'value',
     name:
@@ -82,6 +81,11 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
         name: value[0].labelName,
         unit: value[0].labelUnit,
       }) ?? value[0].labelName,
+    nameTextStyle,
+    axisLine,
+    axisTick,
+    axisLabel,
+    splitLine,
   }
   const yAxis = {
     type: 'value',
@@ -90,6 +94,11 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
         name: value[0].valueName,
         unit: value[0].valueUnit,
       }) ?? value[0].valueName,
+    nameTextStyle,
+    axisLine,
+    axisTick,
+    axisLabel,
+    splitLine,
   }
 
   const series = _.map(value, ({ name, list = [] }, index) => {
@@ -101,22 +110,13 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
           _.get(item, key),
         ),
       ),
-      lineStyle: {
-        color: colors[index],
-        // width: 3,
-        // cap: 'round',
-        // shadowColor: Color(colors[index]).fade(0.2).string(),
-        // shadowBlur: 6,
-        // shadowOffsetX: -1,
-        // shadowOffsetY: 3,
-      },
     }
   })
 
   const option = {
+    color: colors,
     legend,
     tooltip,
-    visualMap,
     xAxis,
     yAxis,
     series,

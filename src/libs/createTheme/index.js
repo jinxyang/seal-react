@@ -16,14 +16,15 @@ const createTheme = (customOptions = defaultOptions) => {
     breakpoints: breakpointGenerator(breakpoints),
     colors: {
       common: {
+        dark: ladderGenerator('#fff', '#000'),
+        light: ladderGenerator('#000', '#fff'),
         darkTransparent: alphaGenerator('#000'),
         lightTransparent: alphaGenerator('#fff'),
         ..._.mapValues(colors, (color) => ({
           default: color,
           darker: ladderGenerator(color, '#000'),
           lighter: ladderGenerator(color, '#fff', _.reverse),
-          dark: ladderGenerator('#fff', '#000'),
-          light: ladderGenerator('#000', '#fff'),
+          transparent: alphaGenerator(color, _.reverse),
         })),
       },
       dark: {

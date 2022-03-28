@@ -13,11 +13,16 @@ const colors = [
 const defaultConfig = {
   xAxisNameFormatter: () => null,
   xAxisLabelFormatter: () => null,
-  yAxisNameFormatter: ({ name, unit }) => `${name}(${unit})`,
+  yAxisNameFormatter: () => null,
   yAxisLabelFormatter: () => null,
 }
 
-const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
+const optionGenerator = (
+  darkMode = false,
+  value = [],
+  customOption = {},
+  customConfig = {},
+) => {
   const config = { ...defaultConfig, ...customConfig }
 
   const x = _.flow(
@@ -35,6 +40,9 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
       unit: valueUnit,
     })),
   )(value)
+
+  const textColor = darkMode ? '#aaa' : '#555'
+  const lineColor = darkMode ? 'rgba(255, 255, 255, .2)' : 'rgba(0, 0, 0, .2)'
 
   const legend = {
     data: _.map(value, ({ name }, index) => ({
@@ -63,18 +71,24 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
       },
     },
   }
+  const nameTextStyle = {
+    color: textColor,
+  }
   const axisLine = {
     show: false,
   }
   const axisTick = {
     show: false,
   }
+  const axisLabel = {
+    color: darkMode ? '#aaa' : '#555',
+  }
   const splitLine = {
     show: true,
-    interval: 2,
+    interval: 4,
     lineStyle: {
-      color: 'rgba(0, 0, 0, .2)',
-      type: [4, 4],
+      color: lineColor,
+      type: [2, 2],
       cap: 'round',
     },
   }
@@ -91,9 +105,11 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
   const xAxis = _.map(x, (axis) => ({
     type: 'category',
     name: config.xAxisNameFormatter(axis),
+    nameTextStyle,
     boundaryGap: false,
     axisLabel: {
       formatter: config.xAxisLabelFormatter(axis),
+      ...axisLabel,
     },
     axisLine,
     axisTick,
@@ -102,11 +118,13 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
   }))
   const yAxis = _.map(y, (axis) => ({
     type: 'value',
-    name: config.yAxisNameFormatter(axis),
+    name: config.yAxisNameFormatter(axis) ?? axis.name,
+    nameTextStyle,
     axisLine,
     axisTick,
     axisLabel: {
       formatter: config.yAxisLabelFormatter(axis),
+      ...axisLabel,
     },
     splitLine,
   }))

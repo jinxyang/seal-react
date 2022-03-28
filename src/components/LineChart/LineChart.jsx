@@ -10,10 +10,12 @@ import {
 
 import useChart from '../../hooks/useChart'
 import View from '../View'
+import Flex from '../Flex'
 import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const LineChart = ({
+  darkMode = false,
   value = [],
   option: customOption = {},
   zoom = false,
@@ -29,8 +31,8 @@ const LineChart = ({
   ])
 
   const [option, { x }] = React.useMemo(() => {
-    return optionGenerator(mergeLabels(value, sorters), customOption)
-  }, [customOption, sorters, value])
+    return optionGenerator(darkMode, mergeLabels(value, sorters), customOption)
+  }, [customOption, darkMode, sorters, value])
 
   React.useEffect(() => {
     if (!batches.length) return
@@ -80,7 +82,29 @@ const LineChart = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chart, option])
 
-  return <View ref={setChart} styles={{ height: '100%' }} />
+  return (
+    <View styles={{ position: 'relative', height: '100%' }}>
+      <View
+        ref={setChart}
+        styles={{ opacity: value.length ? 1 : 0, height: '100%' }}
+      />
+      {!value.length && (
+        <Flex
+          main="center"
+          cross="center"
+          styles={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          暂无数据
+        </Flex>
+      )}
+    </View>
+  )
 }
 
 export default LineChart
