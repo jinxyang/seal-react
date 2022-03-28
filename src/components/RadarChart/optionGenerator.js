@@ -11,7 +11,6 @@ const colors = [
 ]
 
 const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
-  console.log(1, value)
   if (!value.length) return {}
 
   const legend = {
@@ -55,13 +54,19 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
     },
   ]
 
-  return {
+  const option = {
     legend,
     radar,
     series,
     animationDuration: 500,
     animationEasing: (k) => k * k * k,
-    ...customOption,
+  }
+
+  return {
+    ...option,
+    ..._.mapValues(customOption, (value, key) =>
+      _.isFunction(value) ? value(option[key]) : value,
+    ),
   }
 }
 

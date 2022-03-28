@@ -39,7 +39,7 @@ const ConfigProvider = ({
       outputComponents,
       theme: {
         ...theme,
-        colors: theme.colors[mode],
+        colors: { ...theme.colors[mode], ...theme.colors.common },
       },
       toastOptions,
       chartOptions,

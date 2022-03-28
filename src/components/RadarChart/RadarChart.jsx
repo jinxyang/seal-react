@@ -22,7 +22,6 @@ const RadarChart = ({ value = [], option: customOption = {}, config = {} }) => {
   }, [config, customOption, value])
 
   React.useEffect(() => {
-    console.log('RadarChart:', option)
     chart?.setOption?.(option)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chart, option])

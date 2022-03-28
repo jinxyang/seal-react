@@ -30,7 +30,6 @@ const ScatterChart = ({
   }, [config, customOption, value])
 
   React.useEffect(() => {
-    console.log('ScatterChart:', option)
     chart?.setOption?.(option)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chart, option])

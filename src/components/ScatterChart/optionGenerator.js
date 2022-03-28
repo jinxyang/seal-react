@@ -20,12 +20,13 @@ const defaultConfig = {
 }
 
 const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
+  if (value.length < 2) return {}
+
   const {
     xAxisNameFormatter,
     yAxisNameFormatter,
     tooltips = [],
   } = { ...defaultConfig, ...customConfig }
-  if (value.length < 2) return {}
 
   const legend = {
     data: _.map(value, ({ name }, index) => ({
@@ -47,30 +48,29 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
   }
   const visualMap = [
     {
-      left: 'right',
-      top: '10%',
+      top: 10,
+      right: 0,
       dimension: 0,
       min: 0,
       max: 1,
-      itemWidth: 30,
-      itemHeight: 120,
+      itemWidth: 20,
+      itemHeight: 100,
       calculable: true,
       precision: 2,
       text: ['1'],
-      textGap: 30,
       inRange: {
-        symbolSize: [10, 70],
+        symbolSize: [5, 40],
       },
       outOfRange: {
-        symbolSize: [10, 70],
-        color: ['rgba(255,255,255,0.4)'],
+        symbolSize: [5, 40],
+        color: ['rgba(0, 0, 0, .1)'],
       },
       controller: {
         inRange: {
-          color: ['#c23531'],
+          color: [colors[0]],
         },
         outOfRange: {
-          color: ['#999'],
+          color: ['rgba(0, 0, 0, .1)'],
         },
       },
     },
@@ -101,13 +101,19 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
           _.get(item, key),
         ),
       ),
-      // symbolSize: (value, params) => {
-      //   return value[0] * value[1] * 100
-      // },
+      lineStyle: {
+        color: colors[index],
+        // width: 3,
+        // cap: 'round',
+        // shadowColor: Color(colors[index]).fade(0.2).string(),
+        // shadowBlur: 6,
+        // shadowOffsetX: -1,
+        // shadowOffsetY: 3,
+      },
     }
   })
 
-  return {
+  const option = {
     legend,
     tooltip,
     visualMap,
@@ -116,7 +122,13 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
     series,
     animationDuration: 500,
     animationEasing: (k) => k * k * k,
-    ...customOption,
+  }
+
+  return {
+    ...option,
+    ..._.mapValues(customOption, (value, key) =>
+      _.isFunction(value) ? value(option[key]) : value,
+    ),
   }
 }
 

@@ -154,17 +154,23 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
     },
   )
 
+  const option = {
+    legend,
+    tooltip,
+    toolbox,
+    xAxis,
+    yAxis,
+    series,
+    animationDuration: 500,
+    animationEasing: (k) => k * k * k,
+  }
+
   return [
     {
-      legend,
-      tooltip,
-      toolbox,
-      xAxis,
-      yAxis,
-      series,
-      animationDuration: 500,
-      animationEasing: (k) => k * k * k,
-      ...customOption,
+      ...option,
+      ..._.mapValues(customOption, (value, key) =>
+        _.isFunction(value) ? value(option[key]) : value,
+      ),
     },
     { x, y },
   ]
