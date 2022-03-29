@@ -8,14 +8,15 @@ const TabsItem = ({ active = false, onClick = () => {}, children }) => {
       styles={{
         flex: '0 0 auto',
         padding: [0.25, 1.5],
-        backgroundColor: ({ theme }) =>
-          active && theme.colors.primary.transparent[6],
+        backgroundColor: ({ theme }) => active && theme.colors.primary.default,
         borderRadius: 0.75,
         transition: 'all 250ms ease',
         whiteSpace: 'nowrap',
         cursor: active ? 'default' : 'pointer',
+        color: ({ theme }) => (active ? '#fff' : theme.colors.primary.default),
         ':hover': {
-          color: ({ theme }) => !active && theme.colors.primary.default,
+          backgroundColor: ({ theme }) =>
+            !active && theme.colors.transparent[1],
         },
       }}
       onClick={onClick}

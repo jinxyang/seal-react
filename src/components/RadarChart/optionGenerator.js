@@ -1,5 +1,4 @@
 import _ from 'lodash'
-// import Color from 'color'
 
 const colors = [
   '#1890ff',
@@ -26,20 +25,22 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
       inactiveBorderWidth: 0,
     })),
   }
-
   const radar = {
-    indicator: _.flow(
-      _.map(?, 'list'),
-      (lists) => _.zip(...lists),
-      _.map(
-        ?,
-        _.flow(
-          _.maxBy(?, 'value'),
-          _.omit(?, 'unit'),
-          _.mapKeys(?, (value, key) => (key === 'value' ? 'max' : key)),
-        ),
-      ),
-    )(value),
+    indicator: _.map(value[0].list, (item) =>
+      _.pick(item, ['name', 'min', 'max']),
+    ),
+    // indicator: _.flow(
+    //   _.map(?, 'list'),
+    //   (lists) => _.zip(...lists),
+    //   _.map(
+    //     ?,
+    //     _.flow(
+    //       _.maxBy(?, 'value'),
+    //       _.omit(?, 'unit'),
+    //       _.mapKeys(?, (value, key) => (key === 'value' ? 'max' : key)),
+    //     ),
+    //   ),
+    // )(value),
   }
 
   const series = [

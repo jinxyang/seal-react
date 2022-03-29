@@ -21,6 +21,7 @@ const Tabs = ({
         padding: 0.3,
         backgroundColor: ({ theme }) => theme.colors.primary.transparent[15],
         borderRadius: 1,
+        userSelect: 'none',
       }}
     >
       {children

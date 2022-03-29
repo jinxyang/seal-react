@@ -7,7 +7,7 @@ export default {
   radius: 12,
   blur: 1,
   colors: {
-    primary: '#007adf',
+    primary: '#1890ff',
     secondary: '#00ecbc',
     blue: '#29b6f6',
     green: '#66bb6a',
