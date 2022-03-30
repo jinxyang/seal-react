@@ -19,6 +19,7 @@ const LineChart = ({
   value = [],
   option: customOption = {},
   zoom = false,
+  config = {},
   sorters = {},
   onZoom = () => {},
 }) => {
@@ -31,8 +32,13 @@ const LineChart = ({
   ])
 
   const [option, { x }] = React.useMemo(() => {
-    return optionGenerator(darkMode, mergeLabels(value, sorters), customOption)
-  }, [customOption, darkMode, sorters, value])
+    return optionGenerator(
+      darkMode,
+      mergeLabels(value, sorters),
+      customOption,
+      config,
+    )
+  }, [config, customOption, darkMode, sorters, value])
 
   React.useEffect(() => {
     if (!batches.length) return

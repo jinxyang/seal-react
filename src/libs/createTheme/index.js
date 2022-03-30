@@ -23,7 +23,7 @@ const createTheme = (customOptions = defaultOptions) => {
         ..._.mapValues(colors, (color) => ({
           default: color,
           darker: ladderGenerator(color, '#000'),
-          lighter: ladderGenerator(color, '#fff', _.reverse),
+          lighter: ladderGenerator(color, '#fff'),
           transparent: alphaGenerator(color, _.reverse),
         })),
       },

@@ -1,16 +1,8 @@
 import _ from 'lodash'
 import Color from 'color'
 
-const colors = [
-  '#1890ff',
-  '#52c41a',
-  '#13c2c2',
-  '#fa8c16',
-  '#a0d911',
-  '#cbb0e3',
-]
-
 const defaultConfig = {
+  colors: ['#1890ff', '#52c41a', '#13c2c2', '#fa8c16', '#a0d911', '#cbb0e3'],
   xAxisNameFormatter: () => null,
   xAxisLabelFormatter: () => null,
   yAxisNameFormatter: () => null,
@@ -23,7 +15,13 @@ const optionGenerator = (
   customOption = {},
   customConfig = {},
 ) => {
-  const config = { ...defaultConfig, ...customConfig }
+  const {
+    colors,
+    xAxisNameFormatter,
+    xAxisLabelFormatter,
+    yAxisNameFormatter,
+    yAxisLabelFormatter,
+  } = { ...defaultConfig, ...customConfig }
 
   const x = _.flow(
     _.uniqBy(?, 'labelUnit'),
@@ -96,7 +94,7 @@ const optionGenerator = (
     trigger: 'axis',
     axisPointer: {
       lineStyle: {
-        color: 'rgba(0, 0, 0, .1)',
+        color: lineColor,
         width: 5,
         type: 'solid',
       },
@@ -104,11 +102,11 @@ const optionGenerator = (
   }
   const xAxis = _.map(x, (axis) => ({
     type: 'category',
-    name: config.xAxisNameFormatter(axis),
+    name: xAxisNameFormatter(axis),
     nameTextStyle,
     boundaryGap: false,
     axisLabel: {
-      formatter: config.xAxisLabelFormatter(axis),
+      formatter: xAxisLabelFormatter(axis),
       ...axisLabel,
     },
     axisLine,
@@ -118,12 +116,12 @@ const optionGenerator = (
   }))
   const yAxis = _.map(y, (axis) => ({
     type: 'value',
-    name: config.yAxisNameFormatter(axis) ?? axis.name,
+    name: yAxisNameFormatter(axis) ?? axis.name,
     nameTextStyle,
     axisLine,
     axisTick,
     axisLabel: {
-      formatter: config.yAxisLabelFormatter(axis),
+      formatter: yAxisLabelFormatter(axis),
       ...axisLabel,
     },
     splitLine,
@@ -139,8 +137,8 @@ const optionGenerator = (
         type: 'line',
         name,
         data: _.map(list, 'value'),
-        xAxisIndex: _.findIndex(x, ({ name }) => name === labelName),
-        yAxisIndex: _.findIndex(y, ({ name }) => name === valueName),
+        xAxisIndex: _.findIndex(x, ({ unit }) => unit === labelUnit),
+        yAxisIndex: _.findIndex(y, ({ unit }) => unit === valueUnit),
         connectNulls: true,
         smooth: true,
         symbol: 'circle',

@@ -105,11 +105,12 @@ const optionGenerator = (
     return {
       type: 'scatter',
       name,
-      data: _.map(list, (item) =>
-        _.map(tooltips.length ? tooltips : [['label'], ['value']], ([key]) =>
+      data: _.map(list, (item) => [
+        ..._.map(tooltips.length ? tooltips : [['label'], ['value']], ([key]) =>
           _.get(item, key),
         ),
-      ),
+        item.name,
+      ]),
     }
   })
 

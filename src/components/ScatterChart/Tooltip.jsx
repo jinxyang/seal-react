@@ -1,11 +1,46 @@
 import React from 'react'
 import _ from 'lodash'
+import styled from 'styled-components'
+
+const StyledWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+const StyledTitle = styled.p`
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.2em;
+`
+const StyledList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`
+const StyledItem = styled.li`
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+
+  & + & {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(0 0 0 / 5%);
+  }
+`
+const StyledLabel = styled.span``
+const StyledValue = styled.span`
+  font-weight: bold;
+  font-size: 1.1em;
+`
 
 const Tooltip = ({ param = {}, value: rawValue = [], list = [] }) => {
-  const { componentIndex, value } = param
-  const { name, labelName, valueName } = rawValue[componentIndex]
+  const { seriesIndex, value, dataIndex } = param
+  const { labelName, valueName, list: rawList } = rawValue[seriesIndex]
+  const currentData = rawList[dataIndex]
 
-  const items = list.length
+  const tooltips = list.length
     ? [
         ..._.map(list, ([key, label], index) => ({
           label,
@@ -17,15 +52,19 @@ const Tooltip = ({ param = {}, value: rawValue = [], list = [] }) => {
         { label: valueName, value: value[1] },
       ]
   return (
-    <div>
-      <div style={{ fontSize: 16, fontWeight: 'bold' }}>{name}</div>
-      {_.map(items, (item) => (
-        <div key={item.label}>
-          {_.isFunction(item.label) ? item.label(item) : item.label}:{' '}
-          {item.value}
-        </div>
-      ))}
-    </div>
+    <StyledWrap>
+      <StyledTitle>{currentData.name}</StyledTitle>
+      <StyledList>
+        {_.map(tooltips, ({ label, value }, index) => (
+          <StyledItem key={index}>
+            <StyledLabel>{label?.label ?? label}</StyledLabel>
+            <StyledValue>
+              {_.isObject(label) ? label.formatter?.(currentData) : value}
+            </StyledValue>
+          </StyledItem>
+        ))}
+      </StyledList>
+    </StyledWrap>
   )
 }
 

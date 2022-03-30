@@ -22,6 +22,10 @@ const BarChart = ({
   sorters = {},
   onZoom = () => {},
 }) => {
+  const isEmpty = React.useMemo(() => {
+    return !!value.length || _.every(value, ({ list }) => !!list?.length)
+  }, [value])
+
   const [batches, setBatches] = React.useState([])
   const [chart, setChart] = useChart(Chart, [
     GridComponent,
@@ -86,9 +90,9 @@ const BarChart = ({
     <View styles={{ position: 'relative', height: '100%' }}>
       <View
         ref={setChart}
-        styles={{ opacity: value.length ? 1 : 0, height: '100%' }}
+        styles={{ opacity: !isEmpty ? 1 : 0, height: '100%' }}
       />
-      {!value.length && (
+      {isEmpty && (
         <Flex
           main="center"
           cross="center"

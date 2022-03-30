@@ -46,10 +46,14 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
   const series = [
     {
       type: 'radar',
-      data: _.map(value, ({ name, list = [] }) => {
+      symbol: 'none',
+      data: _.map(value, ({ name, list = [] }, index) => {
         return {
           name,
           value: _.map(list, ({ value }) => value),
+          itemStyle: {
+            color: colors[index],
+          },
         }
       }),
     },
