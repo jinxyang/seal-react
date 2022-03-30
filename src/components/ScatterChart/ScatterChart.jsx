@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { ScatterChart as Chart } from 'echarts/charts'
 import {
   GridComponent,
@@ -28,6 +29,9 @@ const ScatterChart = ({
     ToolboxComponent,
     VisualMapComponent,
   ])
+  const isEmpty = React.useMemo(() => {
+    return !value.length || _.every(value, ({ list }) => !list?.length)
+  }, [value])
 
   const option = React.useMemo(() => {
     return optionGenerator(
@@ -47,9 +51,9 @@ const ScatterChart = ({
     <View styles={{ position: 'relative', height: '100%' }}>
       <View
         ref={setChart}
-        styles={{ opacity: value.length ? 1 : 0, height: '100%' }}
+        styles={{ opacity: !isEmpty ? 1 : 0, height: '100%' }}
       />
-      {!value.length && (
+      {isEmpty && (
         <Flex
           main="center"
           cross="center"

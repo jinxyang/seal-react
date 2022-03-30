@@ -31,7 +31,7 @@ const BarChart = ({
     ToolboxComponent,
   ])
   const isEmpty = React.useMemo(() => {
-    return !!value.length || _.every(value, ({ list }) => !!list?.length)
+    return !value.length || _.every(value, ({ list }) => !list?.length)
   }, [value])
 
   const [batches, setBatches] = React.useState([])

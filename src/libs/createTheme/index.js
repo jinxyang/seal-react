@@ -6,12 +6,16 @@ import breakpointGenerator from './breakpointGenerator'
 import ladderGenerator from './ladderGenerator'
 import alphaGenerator from './alphaGenerator'
 
-const createTheme = (customOptions = defaultOptions) => {
-  const { breakpoints, colors, ...options } = {
+const createTheme = (customOptions = {}) => {
+  const {
+    breakpoints,
+    colors: _colors,
+    ...options
+  } = {
     ...defaultOptions,
     ...customOptions,
   }
-
+  const colors = { ...defaultOptions.colors, ...customOptions.colors }
   return {
     breakpoints: breakpointGenerator(breakpoints),
     colors: {

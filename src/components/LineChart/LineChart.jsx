@@ -34,6 +34,9 @@ const LineChart = ({
     TooltipComponent,
     ToolboxComponent,
   ])
+  const isEmpty = React.useMemo(() => {
+    return !value.length || _.every(value, ({ list }) => !list?.length)
+  }, [value])
 
   const [option, { x }] = React.useMemo(() => {
     return optionGenerator(
@@ -96,9 +99,9 @@ const LineChart = ({
     <View styles={{ position: 'relative', height: '100%' }}>
       <View
         ref={setChart}
-        styles={{ opacity: value.length ? 1 : 0, height: '100%' }}
+        styles={{ opacity: !isEmpty ? 1 : 0, height: '100%' }}
       />
-      {!value.length && (
+      {isEmpty && (
         <Flex
           main="center"
           cross="center"
