@@ -8,6 +8,7 @@ import {
   VisualMapComponent,
 } from 'echarts/components'
 
+import { useConfigState } from '../ConfigProvider'
 import useChart from '../../hooks/useChart'
 import View from '../View'
 import Flex from '../Flex'
@@ -19,6 +20,7 @@ const ScatterChart = ({
   option: customOption = {},
   config = {},
 }) => {
+  const [{ mode }] = useConfigState()
   const [chart, setChart] = useChart(Chart, [
     GridComponent,
     LegendPlainComponent,
@@ -28,8 +30,13 @@ const ScatterChart = ({
   ])
 
   const option = React.useMemo(() => {
-    return optionGenerator(darkMode, value, customOption, config)
-  }, [config, customOption, darkMode, value])
+    return optionGenerator(
+      darkMode ?? mode === 'dark',
+      value,
+      customOption,
+      config,
+    )
+  }, [config, customOption, darkMode, mode, value])
 
   React.useEffect(() => {
     chart?.setOption?.(option)

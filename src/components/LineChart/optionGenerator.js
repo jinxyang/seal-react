@@ -15,6 +15,7 @@ const optionGenerator = (
   customOption = {},
   customConfig = {},
 ) => {
+  console.log('darkMode', darkMode)
   const {
     colors,
     xAxisNameFormatter,

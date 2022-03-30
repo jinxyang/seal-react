@@ -8,6 +8,7 @@ import {
   ToolboxComponent,
 } from 'echarts/components'
 
+import { useConfigState } from '../ConfigProvider'
 import useChart from '../../hooks/useChart'
 import View from '../View'
 import Flex from '../Flex'
@@ -15,28 +16,33 @@ import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const BarChart = ({
-  darkMode = false,
+  darkMode = null,
   value = [],
   option: customOption = {},
   zoom = false,
   sorters = {},
   onZoom = () => {},
 }) => {
-  const isEmpty = React.useMemo(() => {
-    return !!value.length || _.every(value, ({ list }) => !!list?.length)
-  }, [value])
-
-  const [batches, setBatches] = React.useState([])
+  const [{ mode }] = useConfigState()
   const [chart, setChart] = useChart(Chart, [
     GridComponent,
     LegendPlainComponent,
     TooltipComponent,
     ToolboxComponent,
   ])
+  const isEmpty = React.useMemo(() => {
+    return !!value.length || _.every(value, ({ list }) => !!list?.length)
+  }, [value])
+
+  const [batches, setBatches] = React.useState([])
 
   const [option, { x }] = React.useMemo(() => {
-    return optionGenerator(darkMode, mergeLabels(value, sorters), customOption)
-  }, [customOption, darkMode, sorters, value])
+    return optionGenerator(
+      darkMode ?? mode === 'dark',
+      mergeLabels(value, sorters),
+      customOption,
+    )
+  }, [customOption, darkMode, mode, sorters, value])
 
   React.useEffect(() => {
     if (!batches.length) return

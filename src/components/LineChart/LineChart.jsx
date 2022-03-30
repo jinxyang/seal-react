@@ -8,6 +8,8 @@ import {
   ToolboxComponent,
 } from 'echarts/components'
 
+import { useConfigState } from '../ConfigProvider'
+
 import useChart from '../../hooks/useChart'
 import View from '../View'
 import Flex from '../Flex'
@@ -15,7 +17,7 @@ import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const LineChart = ({
-  darkMode = false,
+  darkMode = null,
   value = [],
   option: customOption = {},
   zoom = false,
@@ -23,6 +25,8 @@ const LineChart = ({
   sorters = {},
   onZoom = () => {},
 }) => {
+  const [{ mode }] = useConfigState()
+
   const [batches, setBatches] = React.useState([])
   const [chart, setChart] = useChart(Chart, [
     GridComponent,
@@ -33,12 +37,12 @@ const LineChart = ({
 
   const [option, { x }] = React.useMemo(() => {
     return optionGenerator(
-      darkMode,
+      darkMode ?? mode === 'dark',
       mergeLabels(value, sorters),
       customOption,
       config,
     )
-  }, [config, customOption, darkMode, sorters, value])
+  }, [config, customOption, darkMode, mode, sorters, value])
 
   React.useEffect(() => {
     if (!batches.length) return

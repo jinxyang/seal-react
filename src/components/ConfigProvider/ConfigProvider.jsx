@@ -31,6 +31,7 @@ const ConfigProvider = ({
 
   const state = React.useMemo(() => {
     return {
+      mode,
       breakpoints,
       fetchOptions,
       fields,
