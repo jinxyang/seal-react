@@ -70,6 +70,7 @@ const optionGenerator = (
         },
       },
     },
+    top: -100,
   }
   const nameTextStyle = {
     color: textColor,
