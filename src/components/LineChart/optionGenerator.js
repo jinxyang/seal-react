@@ -2,7 +2,15 @@ import _ from 'lodash'
 import Color from 'color'
 
 const defaultConfig = {
-  colors: ['#1890ff', '#52c41a', '#13c2c2', '#fa8c16', '#a0d911', '#cbb0e3'],
+  colors: [
+    '#1890ff',
+    '#52c41a',
+    '#13c2c2',
+    '#fa8c16',
+    '#7C4DFF',
+    '#795548',
+    '#795548',
+  ],
   xAxisNameFormatter: () => null,
   xAxisLabelFormatter: () => null,
   yAxisNameFormatter: () => null,
@@ -15,7 +23,6 @@ const optionGenerator = (
   customOption = {},
   customConfig = {},
 ) => {
-  console.log('darkMode', darkMode)
   const {
     colors,
     xAxisNameFormatter,
@@ -52,7 +59,9 @@ const optionGenerator = (
         padding: [0, 6, 0, 0],
       },
       itemStyle: { color: colors[index], borderWidth: 0 },
-      lineStyle: { width: 2 },
+      lineStyle: { color: colors[index], inactiveColor: lineColor },
+      inactiveColor: lineColor,
+      inactiveBorderColor: lineColor,
       inactiveBorderWidth: 0,
     })),
   }
@@ -85,7 +94,6 @@ const optionGenerator = (
   }
   const splitLine = {
     show: true,
-    interval: 4,
     lineStyle: {
       color: lineColor,
       type: [2, 2],
@@ -166,7 +174,7 @@ const optionGenerator = (
         },
         emphasis: {
           disabled: false,
-          focus: 'self',
+          focus: 'series',
         },
       }
     },

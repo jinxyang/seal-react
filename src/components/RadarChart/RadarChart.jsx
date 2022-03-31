@@ -6,12 +6,19 @@ import {
   TooltipComponent,
 } from 'echarts/components'
 
+import { useConfigState } from '../ConfigProvider'
 import useChart from '../../hooks/useChart'
 import View from '../View'
 import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
-const RadarChart = ({ value = [], option: customOption = {}, config = {} }) => {
+const RadarChart = ({
+  darkMode = null,
+  value = [],
+  option: customOption = {},
+  config = {},
+}) => {
+  const [{ mode }] = useConfigState()
   const [chart, setChart] = useChart(Chart, [
     GridComponent,
     LegendPlainComponent,
@@ -19,8 +26,13 @@ const RadarChart = ({ value = [], option: customOption = {}, config = {} }) => {
   ])
 
   const option = React.useMemo(() => {
-    return optionGenerator(value, customOption, config)
-  }, [config, customOption, value])
+    return optionGenerator(
+      darkMode ?? mode === 'dark',
+      value,
+      customOption,
+      config,
+    )
+  }, [config, customOption, darkMode, mode, value])
 
   React.useEffect(() => {
     chart?.setOption?.(option)

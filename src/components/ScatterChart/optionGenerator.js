@@ -10,7 +10,7 @@ const colors = [
   '#52c41a',
   '#13c2c2',
   '#fa8c16',
-  '#a0d911',
+  '#651FFF',
   '#cbb0e3',
 ]
 
@@ -45,8 +45,7 @@ const optionGenerator = (
         padding: [0, 6, 0, 0],
       },
       itemStyle: { color: colors[index], borderWidth: 0 },
-      lineStyle: { width: 2 },
-      inactiveBorderWidth: 0,
+      inactiveColor: lineColor,
     })),
   }
 

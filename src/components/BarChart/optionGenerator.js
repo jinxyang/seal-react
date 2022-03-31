@@ -1,16 +1,15 @@
 import _ from 'lodash'
 import Color from 'color'
-
-const colors = [
-  '#1890ff',
-  '#52c41a',
-  '#13c2c2',
-  '#fa8c16',
-  '#a0d911',
-  '#cbb0e3',
-]
-
 const defaultConfig = {
+  colors: [
+    '#1890ff',
+    '#52c41a',
+    '#13c2c2',
+    '#fa8c16',
+    '#7C4DFF',
+    '#795548',
+    '#795548',
+  ],
   xAxisNameFormatter: () => null,
   xAxisLabelFormatter: () => null,
   yAxisNameFormatter: () => null,
@@ -23,7 +22,7 @@ const optionGenerator = (
   customOption = {},
   customConfig = {},
 ) => {
-  const config = { ...defaultConfig, ...customConfig }
+  const { colors, ...config } = { ...defaultConfig, ...customConfig }
 
   const x = _.flow(
     _.uniqBy(?, 'labelUnit'),
@@ -54,6 +53,8 @@ const optionGenerator = (
       },
       itemStyle: { color: colors[index], borderWidth: 0 },
       lineStyle: { width: 2 },
+      inactiveColor: lineColor,
+      inactiveBorderColor: lineColor,
       inactiveBorderWidth: 0,
     })),
   }
@@ -86,7 +87,6 @@ const optionGenerator = (
   }
   const splitLine = {
     show: true,
-    interval: 4,
     lineStyle: {
       color: lineColor,
       type: [2, 2],
@@ -107,7 +107,7 @@ const optionGenerator = (
     type: 'category',
     name: config.xAxisNameFormatter(axis),
     nameTextStyle,
-    boundaryGap: false,
+    boundaryGap: true,
     axisLabel: {
       formatter: config.xAxisLabelFormatter(axis),
       ...axisLabel,
@@ -157,7 +157,7 @@ const optionGenerator = (
           shadowOffsetY: 3,
         },
         itemStyle: {
-          color: '#fff',
+          color: Color(colors[index]).alpha(0.5).string(),
           borderColor: Color(colors[index]).darken(0.2).string(),
           borderWidth: 1,
           shadowColor: Color(colors[index]).darken(0.2).fade(0.5).string(),
@@ -167,7 +167,7 @@ const optionGenerator = (
         },
         emphasis: {
           disabled: false,
-          focus: 'self',
+          focus: 'series',
         },
       }
     },

@@ -1,16 +1,18 @@
 import _ from 'lodash'
 
-const colors = [
-  '#1890ff',
-  '#52c41a',
-  '#13c2c2',
-  '#fa8c16',
-  '#a0d911',
-  '#cbb0e3',
-]
+const defaultConfig = {
+  colors: ['#1890ff', '#52c41a', '#13c2c2', '#fa8c16', '#a0d911', '#cbb0e3'],
+}
 
-const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
+const optionGenerator = (
+  darkMode,
+  value = [],
+  customOption = {},
+  customConfig = {},
+) => {
   if (!value.length) return {}
+  const { colors } = { ...defaultConfig, ...customConfig }
+  const lineColor = darkMode ? 'rgba(255, 255, 255, .2)' : 'rgba(0, 0, 0, .2)'
 
   const legend = {
     data: _.map(value, ({ name }, index) => ({
@@ -22,7 +24,8 @@ const optionGenerator = (value = [], customOption = {}, customConfig = {}) => {
       },
       itemStyle: { color: colors[index], borderWidth: 0 },
       lineStyle: { width: 2 },
-      inactiveBorderWidth: 0,
+      inactiveColor: lineColor,
+      inactiveBorderColor: lineColor,
     })),
   }
   const radar = {

@@ -19,6 +19,7 @@ const BarChart = ({
   darkMode = null,
   value = [],
   option: customOption = {},
+  config = {},
   zoom = false,
   sorters = {},
   onZoom = () => {},
@@ -41,8 +42,9 @@ const BarChart = ({
       darkMode ?? mode === 'dark',
       mergeLabels(value, sorters),
       customOption,
+      config,
     )
-  }, [customOption, darkMode, mode, sorters, value])
+  }, [config, customOption, darkMode, mode, sorters, value])
 
   React.useEffect(() => {
     if (!batches.length) return

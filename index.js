@@ -27,6 +27,7 @@ export { default as createFields } from './src/libs/createFields'
 export { default as createTheme } from './src/libs/createTheme'
 // hooks
 export { default as useBreakpoint } from './src/hooks/useBreakpoint'
+export { default as useChart } from './src/hooks/useChart'
 export { default as useFetch } from './src/hooks/useFetch'
 export { default as useFetchFlow } from './src/hooks/useFetchFlow'
 export { default as useFields } from './src/hooks/useFields'
