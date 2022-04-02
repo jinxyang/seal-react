@@ -15,7 +15,12 @@ const builtInWidgets = {
   Exit,
 }
 
-const MenuBar = ({ position = 'top', widgets = ['Clock'], children }) => {
+const MenuBar = ({
+  position = 'top',
+  widgets = ['Clock'],
+  styles = {},
+  children,
+}) => {
   const [{ mode }] = useConfigState()
   return (
     <Flex
@@ -27,6 +32,7 @@ const MenuBar = ({ position = 'top', widgets = ['Clock'], children }) => {
         padding: 0.2,
         backgroundColor: 'transparent[0]',
         boxShadow: '0 1px 2px rgba(0, 0, 0, .1)',
+        ...styles,
       }}
     >
       <Flex cross="center" styles={{ flex: 1 }}>

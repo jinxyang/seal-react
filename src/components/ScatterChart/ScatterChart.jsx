@@ -16,19 +16,24 @@ import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
 const ScatterChart = ({
+  resizeNode = window,
   darkMode = false,
   value = [],
   option: customOption = {},
   config = {},
 }) => {
   const [{ mode }] = useConfigState()
-  const [chart, setChart] = useChart(Chart, [
-    GridComponent,
-    LegendPlainComponent,
-    TooltipComponent,
-    ToolboxComponent,
-    VisualMapComponent,
-  ])
+  const [chart, setChart] = useChart(
+    Chart,
+    [
+      GridComponent,
+      LegendPlainComponent,
+      TooltipComponent,
+      ToolboxComponent,
+      VisualMapComponent,
+    ],
+    resizeNode,
+  )
   const isEmpty = React.useMemo(() => {
     return !value.length || _.every(value, ({ list }) => !list?.length)
   }, [value])

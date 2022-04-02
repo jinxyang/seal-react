@@ -17,6 +17,7 @@ import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const LineChart = ({
+  resizeNode = window,
   darkMode = null,
   value = [],
   option: customOption = {},
@@ -28,12 +29,11 @@ const LineChart = ({
   const [{ mode }] = useConfigState()
 
   const [batches, setBatches] = React.useState([])
-  const [chart, setChart] = useChart(Chart, [
-    GridComponent,
-    LegendPlainComponent,
-    TooltipComponent,
-    ToolboxComponent,
-  ])
+  const [chart, setChart] = useChart(
+    Chart,
+    [GridComponent, LegendPlainComponent, TooltipComponent, ToolboxComponent],
+    resizeNode,
+  )
   const isEmpty = React.useMemo(() => {
     return !value.length || _.every(value, ({ list }) => !list?.length)
   }, [value])

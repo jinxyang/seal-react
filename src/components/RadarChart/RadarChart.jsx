@@ -13,17 +13,18 @@ import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
 const RadarChart = ({
+  resizeNode = window,
   darkMode = null,
   value = [],
   option: customOption = {},
   config = {},
 }) => {
   const [{ mode }] = useConfigState()
-  const [chart, setChart] = useChart(Chart, [
-    GridComponent,
-    LegendPlainComponent,
-    TooltipComponent,
-  ])
+  const [chart, setChart] = useChart(
+    Chart,
+    [GridComponent, LegendPlainComponent, TooltipComponent],
+    resizeNode,
+  )
 
   const option = React.useMemo(() => {
     return optionGenerator(
