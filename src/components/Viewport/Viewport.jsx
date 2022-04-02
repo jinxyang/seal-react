@@ -2,7 +2,7 @@ import React from 'react'
 
 import View from '../View'
 
-const Viewport = ({ zIndex = '', styles = {}, children }) => {
+const Viewport = ({ zIndex = null, styles = {}, children }) => {
   // TODO: 性能优化，是否可以统一管理样式状态
   return (
     <View

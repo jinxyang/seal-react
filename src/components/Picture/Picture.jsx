@@ -3,19 +3,30 @@ import React from 'react'
 import View from '../View'
 
 const Picture = ({
-  src,
+  block = false,
+  src = '',
   width = null,
   height = null,
   align = 'baseline',
+  alt = '',
   styles = {},
+  ...props
 }) => {
-  return src ? (
+  return (
     <View
+      {...props}
       as="img"
       src={src}
-      styles={{ width, height, verticalAlign: align, ...styles }}
+      alt={alt}
+      styles={{
+        display: block && 'block',
+        width,
+        height,
+        verticalAlign: align,
+        ...styles,
+      }}
     />
-  ) : null
+  )
 }
 
 export default Picture

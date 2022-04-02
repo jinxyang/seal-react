@@ -66,6 +66,7 @@ const callbacks = {
   borderBottom: getBorder,
   borderLeft: getBorder,
   borderColor: getColor,
+  letterSpacing: getFontSize,
 }
 
 const getPropValue = (value, prop, responsive = (v) => v) => {
@@ -101,13 +102,17 @@ const useStyle = (styles = {}) => {
   const [{ theme }] = useConfigState()
 
   return React.useMemo(() => {
-    return _.mapValues(styles, (value, prop) => {
-      const propValue = getPropValue(value, prop, responsive)
-      return getStyleValue(propValue, prop, {
-        theme,
-        responsive,
-      })
-    })
+    return _.flow(
+      _.mapValues(?, (value, prop) => {
+        const propValue = getPropValue(value, prop, responsive)
+        const styleValue = getStyleValue(propValue, prop, {
+          theme,
+          responsive,
+        })
+        return styleValue
+      }),
+      _.omitBy(?, _.isBoolean),
+    )(styles)
   }, [responsive, styles, theme])
 }
 
