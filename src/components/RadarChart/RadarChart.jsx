@@ -13,7 +13,7 @@ import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
 const RadarChart = ({
-  resizeNode = window,
+  resizeNode,
   darkMode = null,
   value = [],
   option: customOption = {},

@@ -16,7 +16,7 @@ import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const BarChart = ({
-  resizeNode = window,
+  resizeNode,
   darkMode = null,
   value = [],
   option: customOption = {},

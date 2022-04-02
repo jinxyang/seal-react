@@ -16,7 +16,7 @@ import Flex from '../Flex'
 import optionGenerator from './optionGenerator'
 
 const ScatterChart = ({
-  resizeNode = window,
+  resizeNode,
   darkMode = false,
   value = [],
   option: customOption = {},

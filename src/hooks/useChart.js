@@ -3,7 +3,7 @@ import _ from 'lodash'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 
-const useChart = (Chart, components = [], node = window) => {
+const useChart = (Chart, components = [], node = document.documentElement) => {
   const ref = React.useRef(null)
   const [chart, setChart] = React.useState(null)
 
@@ -20,10 +20,11 @@ const useChart = (Chart, components = [], node = window) => {
 
     echarts.use([Chart, ...components, CanvasRenderer])
     setChart(echarts.init(ref.current))
-    node.addEventListener('resize', handleResize)
+    const observer = new ResizeObserver(handleResize)
+    observer.observe(node)
 
     return () => {
-      node.removeEventListener('resize', handleResize)
+      observer.unobserve(node)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

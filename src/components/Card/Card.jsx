@@ -62,6 +62,8 @@ const Card = ({
           flex: 1,
           background: bgColor,
           borderRadius: 1,
+          width: '100%',
+          overflow: 'hidden',
         }}
       >
         {children}

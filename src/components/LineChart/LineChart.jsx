@@ -17,7 +17,7 @@ import mergeLabels from './mergeLabels'
 import optionGenerator from './optionGenerator'
 
 const LineChart = ({
-  resizeNode = window,
+  resizeNode,
   darkMode = null,
   value = [],
   option: customOption = {},
