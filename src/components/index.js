@@ -20,8 +20,3 @@ export { default as Title } from './Title'
 export { default as Toast } from './Toast'
 export { default as View } from './View'
 export { default as Viewport } from './Viewport'
-// charts
-export { default as BarChart } from './BarChart'
-export { default as LineChart } from './LineChart'
-export { default as RadarChart } from './RadarChart'
-export { default as ScatterChart } from './ScatterChart'

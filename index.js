@@ -22,11 +22,6 @@ export { default as Title } from './src/components/Title'
 export { default as Toast } from './src/components/Toast'
 export { default as View } from './src/components/View'
 export { default as Viewport } from './src/components/Viewport'
-// charts
-export { default as BarChart } from './src/components/BarChart'
-export { default as LineChart } from './src/components/LineChart'
-export { default as RadarChart } from './src/components/RadarChart'
-export { default as ScatterChart } from './src/components/ScatterChart'
 // libs
 export { default as createFields } from './src/libs/createFields'
 export { default as createTheme } from './src/libs/createTheme'
