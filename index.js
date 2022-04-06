@@ -33,6 +33,7 @@ export { default as createTheme } from './src/libs/createTheme'
 // hooks
 export { default as useBreakpoint } from './src/hooks/useBreakpoint'
 export { default as useChart } from './src/hooks/useChart'
+export { useConfigState } from './src/components/ConfigProvider'
 export { default as useDelayRecursion } from './src/hooks/useDelayRecursion'
 export { default as useFetch } from './src/hooks/useFetch'
 export { default as useFetchFlow } from './src/hooks/useFetchFlow'
