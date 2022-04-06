@@ -1,5 +1,6 @@
 export { default as useBreakpoint } from './useBreakpoint'
 export { default as useChart } from './useChart'
+export { default as useDelayRecursion } from './useDelayRecursion'
 export { default as useFetch } from './useFetch'
 export { default as useFetchFlow } from './useFetchFlow'
 export { default as useFields } from './useFields'
