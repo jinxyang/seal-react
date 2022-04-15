@@ -5,6 +5,7 @@ import View from '../View'
 const FlexItem = ({
   as = 'div',
   flex = '',
+  order = 0,
   cross = '',
   styles = {},
   children,
@@ -16,6 +17,7 @@ const FlexItem = ({
       as={as}
       styles={{
         flex,
+        order,
         alignSelf: cross,
         ...styles,
       }}
