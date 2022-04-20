@@ -7,11 +7,12 @@ import useStyle from '../../hooks/useStyle'
 const StyledView = styled.div(({ $style }) => $style)
 
 const View = (
-  { as = 'div', blur = false, styles = {}, children, ...props },
+  { as = 'div', blur = false, seal, styles = {}, children, ...props },
   ref,
 ) => {
   const style = useStyle({
     backdropFilter: blur && `blur(${_.isBoolean(blur) ? '1px' : blur})`,
+    overflow: seal && 'hidden',
     ...styles,
   })
 

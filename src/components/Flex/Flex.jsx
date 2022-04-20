@@ -11,6 +11,7 @@ const Flex = ({
   main = '',
   cross = '',
   align = '',
+  seal,
   styles = {},
   children,
   ...props
@@ -19,6 +20,7 @@ const Flex = ({
     <View
       {...props}
       as={as}
+      seal={seal}
       styles={{
         display: ({ responsive }) =>
           responsive(inline) ? 'inline-flex' : 'flex',
@@ -31,7 +33,11 @@ const Flex = ({
         ...styles,
       }}
     >
-      {children}
+      {React.Children.map(children, (child, index) =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, { seal: child.props.seal ?? seal })
+          : child,
+      )}
     </View>
   )
 }
