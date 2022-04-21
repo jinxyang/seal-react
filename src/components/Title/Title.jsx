@@ -68,14 +68,15 @@ const Title = ({
   styles = {},
   children,
 }) => {
+  const isElement = React.isValidElement(prefix)
   return (
     <Flex cross="center" gap={asStyles[as]?.gap}>
       {prefix && (
         <Flex.Item
           flex="0 0 auto"
-          styles={{ ...asStyles[as]?.icon, overflow: 'hidden' }}
+          styles={{ ...(!isElement && asStyles[as]?.icon), overflow: 'hidden' }}
         >
-          {React.isValidElement(prefix) ? (
+          {isElement ? (
             prefix
           ) : (
             <Picture src={prefix} height="100%" styles={{ display: 'block' }} />
