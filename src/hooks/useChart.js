@@ -17,14 +17,14 @@ const useChart = (Chart, components = [], node = document.documentElement) => {
   React.useEffect(() => {
     // ? chart, useful?
     if (chart || !ref.current) return
-
+    const dom = _.isFunction(node) ? node() : node
     echarts.use([Chart, ...components, CanvasRenderer])
     setChart(echarts.init(ref.current))
     const observer = new ResizeObserver(handleResize)
-    observer.observe(node)
+    observer.observe(dom)
 
     return () => {
-      observer.unobserve(node)
+      observer.unobserve(dom)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
