@@ -10,7 +10,7 @@ const weeksName = {
   4: '四',
   5: '五',
   6: '六',
-  7: '日',
+  0: '日',
 }
 
 const Clock = ({ styles = {} }) => {
