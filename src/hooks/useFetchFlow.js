@@ -36,7 +36,7 @@ const useFetch = (services = [], callbackOrDelay, delay = 0) => {
   const start = React.useCallback(
     async (payloads = []) => {
       await sleep(typeof callbackOrDelay === 'number' ? callbackOrDelay : delay)
-
+      setList([])
       for await (const [index, service] of _.toPairs(services)) {
         list?.[index]?.[1]?.abort?.()
 
