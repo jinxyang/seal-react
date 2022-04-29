@@ -3,7 +3,7 @@ import _ from 'lodash'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 
-const useChart = (Chart, components = [], node = document.documentElement) => {
+const useChart = (Chart, components = [], node) => {
   const ref = React.useRef(null)
   const [chart, setChart] = React.useState(null)
 
@@ -17,7 +17,9 @@ const useChart = (Chart, components = [], node = document.documentElement) => {
   React.useEffect(() => {
     // ? chart, useful?
     if (chart || !ref.current) return
-    const dom = _.isFunction(node) ? node() : node
+    const dom = _.isFunction(node)
+      ? node()
+      : node || ref.current?.parentNode || document.documentElement
     echarts.use([Chart, ...components, CanvasRenderer])
     setChart(echarts.init(ref.current))
     const observer = new ResizeObserver(handleResize)
