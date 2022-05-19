@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { stringify, parse } from 'query-string'
 
 import { useConfigState } from '../components/ConfigProvider'
@@ -13,9 +14,24 @@ const defaultOptions = {
   transformError: () => {},
 }
 
-const useFetch = (service = () => {}, callbackOrDelay, delay = 0) => {
+const useFetch = (service = () => {}, callbackOrOptions) => {
   const [{ fetchOptions }] = useConfigState()
   const setToast = useToast()
+
+  const {
+    callback,
+    delay,
+    autoAbort = true,
+  } = React.useMemo(() => {
+    if (callbackOrOptions == null) {
+      return {}
+    } else if (_.isFunction(callbackOrOptions)) {
+      return {
+        callback: callbackOrOptions,
+      }
+    }
+    return callbackOrOptions
+  }, [callbackOrOptions])
 
   const { initialState, transformRequest, transformResponse, transformError } =
     React.useMemo(() => {
@@ -33,7 +49,7 @@ const useFetch = (service = () => {}, callbackOrDelay, delay = 0) => {
 
   const start = React.useCallback(
     async (...payload) => {
-      controller.abort?.()
+      autoAbort && controller.abort?.()
 
       const newController = new AbortController()
       setState(([state]) => [
@@ -79,7 +95,7 @@ const useFetch = (service = () => {}, callbackOrDelay, delay = 0) => {
         ),
       )
 
-      await sleep(typeof callbackOrDelay === 'number' ? callbackOrDelay : delay)
+      _.isNumber(delay) && (await sleep(delay))
 
       let newState = {}
       try {
@@ -106,11 +122,12 @@ const useFetch = (service = () => {}, callbackOrDelay, delay = 0) => {
         }
       }
       setState([newState, {}])
-      typeof callbackOrDelay === 'function' && callbackOrDelay(newState)
+      callback?.(newState)
       return newState
     },
     [
-      callbackOrDelay,
+      autoAbort,
+      callback,
       controller,
       delay,
       initialState,
@@ -126,7 +143,8 @@ const useFetch = (service = () => {}, callbackOrDelay, delay = 0) => {
     return () => {
       controller.abort?.()
     }
-  }, [controller])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return [state, start, () => controller.abort?.()]
 }
